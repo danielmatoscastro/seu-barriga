@@ -34,7 +34,16 @@ describe('user-related routes', () => {
       const response = await request(app).post('/users').send(user);
 
       expect(response.status).toBe(400);
-      expect(response.body).toHaveProperty('error', 'cannot to insert an unnamed user');
+      expect(response.body).toHaveProperty('error', 'cannot to insert an user without name');
+    });
+
+    it('should not insert an user without mail', async () => {
+      delete user.mail;
+
+      const response = await request(app).post('/users').send(user);
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty('error', 'cannot to insert an user without mail');
     });
   });
 });
