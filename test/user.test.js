@@ -22,12 +22,19 @@ describe('user-related routes', () => {
     });
 
     it('should insert an user', async () => {
-      const response = await request(app)
-        .post('/users')
-        .send(user);
+      const response = await request(app).post('/users').send(user);
 
       expect(response.status).toBe(201);
       expect(response.body[0]).toHaveProperty('name', user.name);
+    });
+
+    it('should not insert an unnamed user', async () => {
+      delete user.name;
+
+      const response = await request(app).post('/users').send(user);
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty('error', 'cannot to insert an unnamed user');
     });
   });
 });

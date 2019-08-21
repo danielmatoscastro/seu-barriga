@@ -1,6 +1,6 @@
-const knex = require('./db');
+const knex = require('../../config/db');
 
-class UserModel {
+class UserRepository {
   static find() {
     return knex('users').select();
   }
@@ -10,4 +10,4 @@ class UserModel {
   }
 }
 
-module.exports = UserModel;
+module.exports = UserRepository;
