@@ -45,5 +45,23 @@ describe('user-related routes', () => {
       expect(response.status).toBe(400);
       expect(response.body).toHaveProperty('error', 'cannot to insert an user without mail');
     });
+
+    it('should not insert an user without passwd', async () => {
+      delete user.passwd;
+
+      const response = await request(app).post('/users').send(user);
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty('error', 'cannot to insert an user without passwd');
+    });
+
+    it('should not insert an user which mail already exists', async () => {
+      await request(app).post('/users').send(user);
+
+      const response = await request(app).post('/users').send(user);
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty('error', 'mail already exists');
+    });
   });
 });
