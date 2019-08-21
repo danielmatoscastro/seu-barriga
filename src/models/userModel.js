@@ -7,13 +7,11 @@ class UserModel {
 
   static async createUser(user) {
     const missing = UserModel.requiredFieldsMissing(user);
-
     if (missing.length > 0) {
       return { error: `cannot to insert an user without ${missing[0]}` };
     }
 
     const mailInDB = await UserRepository.findByMail(user.mail);
-
     if (mailInDB.length > 0) {
       return { error: 'mail already exists' };
     }
