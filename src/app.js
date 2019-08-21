@@ -5,7 +5,7 @@ const app = express();
 
 consign({ cwd: 'src', verbose: false })
   .include('./middlewares/bodyParser.js')
-  .include('./routes/user.js')
+  .include('./routes/userRoutes.js')
   .into(app);
 
 app.get('/', (req, res) => res.sendStatus(200));
