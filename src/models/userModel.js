@@ -6,16 +6,10 @@ class UserModel {
   }
 
   static async createUser(user) {
-    if (!user.name) {
-      return { error: 'cannot to insert an user without name' };
-    }
+    const missing = UserModel.requiredFieldsMissing(user);
 
-    if (!user.mail) {
-      return { error: 'cannot to insert an user without mail' };
-    }
-
-    if (!user.passwd) {
-      return { error: 'cannot to insert an user without passwd' };
+    if (missing.length > 0) {
+      return { error: `cannot to insert an user without ${missing[0]}` };
     }
 
     const mailInDB = await UserRepository.findByMail(user.mail);
@@ -25,6 +19,19 @@ class UserModel {
     }
 
     return UserRepository.create(user);
+  }
+
+  static requiredFieldsMissing(user) {
+    const requiredFields = ['name', 'mail', 'passwd'];
+    const requiredFieldsMissing = [];
+
+    requiredFields.forEach((field) => {
+      if (!user[field]) {
+        requiredFieldsMissing.push(field);
+      }
+    });
+
+    return requiredFieldsMissing;
   }
 }
 
