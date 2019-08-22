@@ -1,5 +1,8 @@
 const express = require('express');
 const consign = require('consign');
+require('dotenv').config({
+  path: process.env.NODE_ENV === 'production' ? '.env' : '.test.env',
+});
 
 const app = express();
 

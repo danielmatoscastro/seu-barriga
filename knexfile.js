@@ -1,15 +1,13 @@
 module.exports = {
-  test: {
-    client: 'pg',
-    version: '11.5',
-    connection: {
-      host: '172.17.0.2',
-      user: 'postgres',
-      password: 'postgres',
-      database: 'barriga',
-    },
-    migrations: {
-      directory: 'src/migrations',
-    },
+  client: 'pg',
+  version: '11.5',
+  connection: {
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE,
+  },
+  migrations: {
+    directory: 'src/migrations',
   },
 };
