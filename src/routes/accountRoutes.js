@@ -4,6 +4,7 @@ const AccountController = require('../controllers/accountController');
 const router = express.Router();
 
 module.exports = (app) => {
+  router.get('/accounts', AccountController.index);
   router.post('/accounts', AccountController.store);
 
   app.use(router);

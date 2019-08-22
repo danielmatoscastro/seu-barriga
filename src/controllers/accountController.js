@@ -1,6 +1,12 @@
 const AccountModel = require('../models/accountModel');
 
 class AccountController {
+  static async index(req, res) {
+    const result = await AccountModel.listAccounts();
+
+    return res.json(result);
+  }
+
   static async store(req, res) {
     const account = req.body;
 
