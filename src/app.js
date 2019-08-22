@@ -6,6 +6,7 @@ const app = express();
 consign({ cwd: 'src', verbose: false })
   .include('./middlewares/bodyParser.js')
   .include('./routes/userRoutes.js')
+  .include('./routes/accountRoutes.js')
   .into(app);
 
 app.get('/', (req, res) => res.sendStatus(200));
