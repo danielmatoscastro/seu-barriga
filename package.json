@@ -21,6 +21,7 @@
     "supertest": "^4.0.2"
   },
   "dependencies": {
+    "@hapi/joi": "^15.1.1",
     "body-parser": "^1.19.0",
     "consign": "^0.1.6",
     "dotenv": "^8.1.0",

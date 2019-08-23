@@ -1,4 +1,5 @@
 const UserRepository = require('./repositories/userRepository');
+const UserSchema = require('./schemas/userSchema');
 
 class UserModel {
   static async listUsers() {
@@ -6,9 +7,9 @@ class UserModel {
   }
 
   static async createUser(user) {
-    const missing = UserModel.requiredFieldsMissing(user);
-    if (missing.length > 0) {
-      return { error: `cannot to insert an user without ${missing[0]}` };
+    const { error } = UserSchema.simpleValidate(user);
+    if (error) {
+      return { error: error.message };
     }
 
     const mailInDB = await UserRepository.findByMail(user.mail);
