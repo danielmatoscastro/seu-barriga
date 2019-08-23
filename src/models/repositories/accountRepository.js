@@ -5,6 +5,10 @@ class AccountRepository {
     return knex('accounts').select();
   }
 
+  static findById(id) {
+    return knex('accounts').select().where({ id });
+  }
+
   static create(account) {
     return knex('accounts').insert(account, '*');
   }

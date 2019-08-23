@@ -37,8 +37,22 @@ describe('account-related routes', () => {
 
       expect(response.status).toBe(200);
       expect(response.body.length).toBeGreaterThan(0);
-      expect(response.body.find((item) => item.name === account.name 
+      expect(response.body.find((item) => item.name === account.name
       && item.user_id === account.user_id)).not.toBeUndefined();
+    });
+  });
+
+  describe('GET /accounts/:id', () => {
+    it('should find an account by id', async () => {
+      const accountDB = (await request(app)
+        .post('/accounts')
+        .send(account)).body[0];
+
+      const response = await request(app).get(`/accounts/${accountDB.id}`);
+
+      expect(response.status).toBe(200);
+      expect(response.body.length).toBe(1);
+      expect(response.body[0]).toEqual(accountDB);
     });
   });
 });

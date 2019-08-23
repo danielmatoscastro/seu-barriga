@@ -7,6 +7,13 @@ class AccountController {
     return res.json(result);
   }
 
+  static async show(req, res) {
+    const { id } = req.params;
+    const result = await AccountModel.findAccount(id);
+
+    return res.json(result);
+  }
+
   static async store(req, res) {
     const account = req.body;
 
