@@ -3,14 +3,14 @@ const faker = require('faker');
 const app = require('../src/app');
 
 describe('user-related routes', () => {
-  describe('GET /users', () => {
-    it('should list all users', async () => {
-      const response = await request(app).get('/users');
+  // describe('GET /users', () => {
+  //   it('should list all users', async () => {
+  //     const response = await request(app).get('/users');
 
-      expect(response.status).toBe(200);
-      expect(response.body.length).toBeGreaterThan(0);
-    });
-  });
+  //     expect(response.status).toBe(200);
+  //     expect(response.body.length).toBeGreaterThan(0);
+  //   });
+  // });
 
   describe('POST /users', () => {
     const user = {};
