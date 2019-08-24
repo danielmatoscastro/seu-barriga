@@ -19,19 +19,6 @@ class UserModel {
 
     return UserRepository.create(user);
   }
-
-  static requiredFieldsMissing(user) {
-    const requiredFields = ['name', 'mail', 'passwd'];
-    const requiredFieldsMissing = [];
-
-    requiredFields.forEach((field) => {
-      if (!user[field]) {
-        requiredFieldsMissing.push(field);
-      }
-    });
-
-    return requiredFieldsMissing;
-  }
 }
 
 module.exports = UserModel;
