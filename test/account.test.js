@@ -57,6 +57,14 @@ describe('account-related routes', () => {
       expect(response.body.length).toBe(1);
       expect(response.body[0]).toEqual(accountDB);
     });
+
+    it('should return 404 when account not exists', async () => {
+      const id = faker.random.number({ min: 10000000 });
+
+      const response = await request(app).get(`/accounts/${id}`);
+
+      expect(response.status).toBe(404);
+    });
   });
 
   describe('PUT /accounts/:id', () => {

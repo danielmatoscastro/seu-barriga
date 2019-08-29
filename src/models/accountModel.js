@@ -5,8 +5,14 @@ class AccountModel {
     return AccountRepository.find();
   }
 
-  static findAccount(id) {
-    return AccountRepository.findById(id);
+  static async findAccount(id) {
+    const result = await AccountRepository.findById(id);
+
+    if (result.length === 0) {
+      return { error: 'account not found' };
+    }
+
+    return result;
   }
 
   static createAccount(account) {

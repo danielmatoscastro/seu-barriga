@@ -11,6 +11,10 @@ class AccountController {
     const { id } = req.params;
     const result = await AccountModel.findAccount(id);
 
+    if (result.error) {
+      return res.sendStatus(404);
+    }
+
     return res.json(result);
   }
 
