@@ -21,6 +21,15 @@ class AccountController {
 
     return res.status(201).json(result);
   }
+
+  static async update(req, res) {
+    const { id } = req.params;
+    const account = req.body;
+
+    await AccountModel.updateAccount(id, account);
+
+    return res.sendStatus(204);
+  }
 }
 
 module.exports = AccountController;

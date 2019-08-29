@@ -11,7 +11,9 @@ describe('account-related routes', () => {
     user.mail = faker.internet.email();
     user.passwd = faker.internet.password(6);
 
-    const response = await request(app).post('/users').send(user);
+    const response = await request(app)
+      .post('/users')
+      .send(user);
     [user] = response.body;
   });
 
@@ -22,7 +24,9 @@ describe('account-related routes', () => {
 
   describe('POST /accounts', () => {
     it('should insert an account', async () => {
-      const response = await request(app).post('/accounts').send(account);
+      const response = await request(app)
+        .post('/accounts')
+        .send(account);
 
       expect(response.status).toBe(201);
       expect(response.body[0]).toHaveProperty('name', account.name);
@@ -31,14 +35,19 @@ describe('account-related routes', () => {
 
   describe('GET /accounts', () => {
     it('should list all accounts', async () => {
-      await request(app).post('/accounts').send(account);
+      await request(app)
+        .post('/accounts')
+        .send(account);
 
       const response = await request(app).get('/accounts');
 
       expect(response.status).toBe(200);
       expect(response.body.length).toBeGreaterThan(0);
-      expect(response.body.find((item) => item.name === account.name
-      && item.user_id === account.user_id)).not.toBeUndefined();
+      expect(
+        response.body.find(
+          (item) => item.name === account.name && item.user_id === account.user_id,
+        ),
+      ).not.toBeUndefined();
     });
   });
 
@@ -53,6 +62,25 @@ describe('account-related routes', () => {
       expect(response.status).toBe(200);
       expect(response.body.length).toBe(1);
       expect(response.body[0]).toEqual(accountDB);
+    });
+  });
+
+  describe('PUT /accounts/:id', () => {
+    it("should update account's name", async () => {
+      const accountDB = (await request(app)
+        .post('/accounts')
+        .send(account)).body[0];
+      accountDB.name += new Date().getMilliseconds().toString();
+      const url = `/accounts/${accountDB.id}`;
+
+      const response = await request(app)
+        .put(url)
+        .send(accountDB);
+
+      const accountDBModified = (await request(app).get(url)).body[0];
+
+      expect(response.status).toBe(204);
+      expect(accountDBModified.name).toBe(accountDB.name);
     });
   });
 });
