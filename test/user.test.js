@@ -1,6 +1,7 @@
 const request = require('supertest');
 const faker = require('faker');
 const app = require('../src/app');
+const insert = require('./utils/insert')(app);
 
 describe('user-related routes', () => {
   const user = {};
@@ -29,10 +30,7 @@ describe('user-related routes', () => {
         .send(user);
 
       expect(response.status).toBe(400);
-      expect(response.body).toHaveProperty(
-        'error',
-        'cannot to insert an user without name',
-      );
+      expect(response.body).toHaveProperty('error', 'cannot to insert an user without name');
     });
 
     it('should not insert an user without mail', async () => {
@@ -43,10 +41,7 @@ describe('user-related routes', () => {
         .send(user);
 
       expect(response.status).toBe(400);
-      expect(response.body).toHaveProperty(
-        'error',
-        'cannot to insert an user without mail',
-      );
+      expect(response.body).toHaveProperty('error', 'cannot to insert an user without mail');
     });
 
     it('should not insert an user without passwd', async () => {
@@ -57,10 +52,7 @@ describe('user-related routes', () => {
         .send(user);
 
       expect(response.status).toBe(400);
-      expect(response.body).toHaveProperty(
-        'error',
-        'cannot to insert an user without passwd',
-      );
+      expect(response.body).toHaveProperty('error', 'cannot to insert an user without passwd');
     });
 
     it('should not insert an user which mail already exists', async () => {
@@ -79,9 +71,7 @@ describe('user-related routes', () => {
 
   describe('GET /users', () => {
     it('should list all users', async () => {
-      const { id } = (await request(app)
-        .post('/users')
-        .send(user)).body[0];
+      const { id } = await insert('users', user);
 
       const response = await request(app).get('/users');
 

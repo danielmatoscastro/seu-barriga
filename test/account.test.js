@@ -1,6 +1,7 @@
 const request = require('supertest');
 const faker = require('faker');
 const app = require('../src/app');
+const insert = require('./utils/insert')(app);
 
 describe('account-related routes', () => {
   let user = {};
@@ -11,10 +12,7 @@ describe('account-related routes', () => {
     user.mail = faker.internet.email();
     user.passwd = faker.internet.password(6);
 
-    const response = await request(app)
-      .post('/users')
-      .send(user);
-    [user] = response.body;
+    user = await insert('users', user);
   });
 
   beforeEach(() => {
@@ -35,9 +33,7 @@ describe('account-related routes', () => {
 
   describe('GET /accounts', () => {
     it('should list all accounts', async () => {
-      await request(app)
-        .post('/accounts')
-        .send(account);
+      await insert('accounts', account);
 
       const response = await request(app).get('/accounts');
 
@@ -53,9 +49,7 @@ describe('account-related routes', () => {
 
   describe('GET /accounts/:id', () => {
     it('should find an account by id', async () => {
-      const accountDB = (await request(app)
-        .post('/accounts')
-        .send(account)).body[0];
+      const accountDB = await insert('accounts', account);
 
       const response = await request(app).get(`/accounts/${accountDB.id}`);
 
@@ -67,11 +61,9 @@ describe('account-related routes', () => {
 
   describe('PUT /accounts/:id', () => {
     it("should update account's name", async () => {
-      const accountDB = (await request(app)
-        .post('/accounts')
-        .send(account)).body[0];
-      accountDB.name += new Date().getMilliseconds().toString();
+      const accountDB = await insert('accounts', account);
       const url = `/accounts/${accountDB.id}`;
+      accountDB.name += new Date().getMilliseconds().toString();
 
       const response = await request(app)
         .put(url)
