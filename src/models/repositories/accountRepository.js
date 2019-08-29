@@ -20,6 +20,12 @@ class AccountRepository {
       .where({ id })
       .update({ name });
   }
+
+  static delete(id) {
+    return knex('accounts')
+      .where({ id })
+      .delete();
+  }
 }
 
 module.exports = AccountRepository;

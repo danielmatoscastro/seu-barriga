@@ -28,6 +28,10 @@ class AccountModel {
 
     return AccountRepository.updateName(id, account.name);
   }
+
+  static removeAccount(id) {
+    return AccountRepository.delete(id);
+  }
 }
 
 module.exports = AccountModel;

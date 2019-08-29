@@ -34,6 +34,14 @@ class AccountController {
 
     return res.sendStatus(204);
   }
+
+  static async destroy(req, res) {
+    const { id } = req.params;
+
+    await AccountModel.removeAccount(id);
+
+    return res.sendStatus(200);
+  }
 }
 
 module.exports = AccountController;

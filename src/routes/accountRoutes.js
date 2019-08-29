@@ -8,6 +8,7 @@ module.exports = (app) => {
   router.get('/accounts/:id', AccountController.show);
   router.post('/accounts', AccountController.store);
   router.put('/accounts/:id', AccountController.update);
+  router.delete('/accounts/:id', AccountController.destroy);
 
   app.use(router);
 };

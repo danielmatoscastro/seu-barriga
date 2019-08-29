@@ -83,4 +83,17 @@ describe('account-related routes', () => {
       expect(accountDBModified.name).toBe(accountDB.name);
     });
   });
+
+  describe('DELETE /accounts/:id', () => {
+    it('should delete an account', async () => {
+      const { id } = await insert('accounts', account);
+      const url = `/accounts/${id}`;
+
+      const response = await request(app).delete(url);
+
+      const accountDeleted = await request(app).get(url);
+      expect(response.status).toBe(200);
+      expect(accountDeleted.status).toBe(404);
+    });
+  });
 });
