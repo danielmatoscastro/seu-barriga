@@ -1,46 +1,62 @@
 const AccountModel = require('../models/accountModel');
 
 class AccountController {
-  static async index(req, res) {
-    const result = await AccountModel.listAccounts();
+  static async index(req, res, next) {
+    try {
+      const result = await AccountModel.listAccounts();
 
-    return res.json(result);
-  }
-
-  static async show(req, res) {
-    const { id } = req.params;
-    const result = await AccountModel.findAccount(id);
-
-    if (result.error) {
-      return res.sendStatus(404);
+      return res.json(result);
+    } catch (err) {
+      return next(err);
     }
-
-    return res.json(result);
   }
 
-  static async store(req, res) {
-    const account = req.body;
+  static async show(req, res, next) {
+    try {
+      const { id } = req.params;
+      const result = await AccountModel.findAccount(id);
 
-    const result = await AccountModel.createAccount(account);
-
-    return res.status(201).json(result);
+      return res.json(result);
+    } catch (err) {
+      return next(err);
+    }
   }
 
-  static async update(req, res) {
-    const { id } = req.params;
-    const account = req.body;
+  static async store(req, res, next) {
+    try {
+      const account = req.body;
 
-    await AccountModel.updateAccount(id, account);
+      const result = await AccountModel.createAccount(account);
 
-    return res.sendStatus(204);
+      return res.status(201).json(result);
+    } catch (err) {
+      return next(err);
+    }
   }
 
-  static async destroy(req, res) {
-    const { id } = req.params;
+  static async update(req, res, next) {
+    try {
+      const { id } = req.params;
+      const account = req.body;
 
-    await AccountModel.removeAccount(id);
+      await AccountModel.updateAccount(id, account);
 
-    return res.sendStatus(200);
+      return res.sendStatus(204);
+    } catch (err) {
+      return next(err);
+    }
+  }
+
+  static async destroy(req, res, next) {
+    try {
+      const { id } = req.params;
+
+      await AccountModel.removeAccount(id);
+
+      return res.sendStatus(200);
+    } catch (err) {
+      return next(err);
+    }
   }
 }
 

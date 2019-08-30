@@ -1,5 +1,6 @@
 const UserRepository = require('./repositories/userRepository');
 const UserSchema = require('./schemas/userSchema');
+const { throwValidationError } = require('../errors/factories');
 
 class UserModel {
   static async listUsers() {
@@ -9,12 +10,12 @@ class UserModel {
   static async createUser(user) {
     const { error } = UserSchema.simpleValidate(user);
     if (error) {
-      return { error: error.message };
+      throwValidationError(error.message);
     }
 
     const mailInDB = await UserRepository.findByMail(user.mail);
     if (mailInDB.length > 0) {
-      return { error: 'mail already exists' };
+      throwValidationError('mail already exists');
     }
 
     return UserRepository.create(user);

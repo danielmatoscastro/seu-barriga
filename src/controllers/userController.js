@@ -1,22 +1,24 @@
 const UserModel = require('../models/userModel');
 
 class UserController {
-  static async index(req, res) {
-    const users = await UserModel.listUsers();
+  static async index(req, res, next) {
+    try {
+      const users = await UserModel.listUsers();
 
-    return res.json(users);
+      return res.json(users);
+    } catch (err) {
+      return next(err);
+    }
   }
 
-  static async store(req, res) {
-    const result = await UserModel.createUser(req.body);
+  static async store(req, res, next) {
+    try {
+      const result = await UserModel.createUser(req.body);
 
-    if (result.error) {
-      res.status(400);
-    } else {
-      res.status(201);
+      return res.status(201).json(result);
+    } catch (err) {
+      return next(err);
     }
-
-    return res.json(result);
   }
 }
 

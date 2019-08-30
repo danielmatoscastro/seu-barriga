@@ -1,4 +1,5 @@
 const AccountRepository = require('./repositories/accountRepository');
+const { throwValidationError, throwNotFoundError } = require('../errors/factories');
 
 class AccountModel {
   static listAccounts() {
@@ -9,7 +10,7 @@ class AccountModel {
     const result = await AccountRepository.findById(id);
 
     if (result.length === 0) {
-      return { error: 'account not found' };
+      throwNotFoundError('account not found');
     }
 
     return result;
@@ -23,7 +24,7 @@ class AccountModel {
     const { name } = account;
 
     if (!name || name.trim() === '') {
-      return { error: 'Name must be a non-empty string.' };
+      throwValidationError('Name must be a non-empty string.');
     }
 
     return AccountRepository.updateName(id, account.name);
