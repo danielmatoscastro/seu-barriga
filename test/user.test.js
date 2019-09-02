@@ -1,7 +1,9 @@
 const request = require('supertest');
 const faker = require('faker');
+const bcrypt = require('bcrypt');
 const app = require('../src/app');
 const insert = require('./utils/insert')(app);
+const selectInDB = require('./utils/selectInDB');
 
 describe('user-related routes', () => {
   const user = {};
@@ -20,6 +22,19 @@ describe('user-related routes', () => {
 
       expect(response.status).toBe(201);
       expect(response.body[0]).toHaveProperty('name', user.name);
+      expect(response.body[0]).not.toHaveProperty('passwd');
+    });
+
+    it('should encrypt passwd and not return this property', async () => {
+      const { passwd: passwdWithoutHash } = user;
+
+      const response = await request(app).post('/users').send(user);
+
+      const { id } = response.body[0];
+      const { passwd } = await selectInDB('users', id);
+      expect(response.body[0]).not.toHaveProperty('passwd');
+      expect(passwd).not.toBe(passwdWithoutHash);
+      expect(await bcrypt.compare(passwdWithoutHash, passwd)).toBe(true);
     });
 
     it('should not insert an unnamed user', async () => {
