@@ -5,14 +5,14 @@ const app = require('../src/app');
 const insert = require('./utils/insert')(app);
 
 describe('auth-related routes', () => {
-  let user = {};
+  const user = {};
 
   beforeAll(async () => {
     user.name = faker.name.findName();
     user.mail = faker.internet.email();
     user.passwd = faker.internet.password(6);
 
-    user = { ...user, ...(await insert('users', user)) };
+    user.id = (await insert('users', user)).id;
   });
 
   describe('POST /login', () => {
