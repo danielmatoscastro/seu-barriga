@@ -1,19 +1,19 @@
-const express = require('express');
-const consign = require('consign');
 require('dotenv').config({
   path: process.env.NODE_ENV === 'production' ? '.env' : '.test.env',
 });
+const express = require('express');
+const userRoutes = require('./routes/userRoutes');
+const accountRoutes = require('./routes/accountRoutes');
+const authRoutes = require('./routes/authRoutes');
+const errorHandler = require('./middlewares/errorHandler');
 
 const app = express();
 
-consign({ cwd: 'src', verbose: false })
-  .include('./middlewares/bodyParser.js')
-  .include('./routes/userRoutes.js')
-  .include('./routes/accountRoutes.js')
-  .include('./routes/authRoutes.js')
-  .include('./middlewares/errorHandler.js')
-  .into(app);
-
+app.use(express.json());
 app.get('/', (req, res) => res.sendStatus(200));
+app.use('/', userRoutes);
+app.use('/', accountRoutes);
+app.use('/', authRoutes);
+app.use(errorHandler);
 
 module.exports = app;
