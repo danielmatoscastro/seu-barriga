@@ -6,7 +6,9 @@ class UserRepository {
   }
 
   static findByMail(mail) {
-    return knex('users').select().where({ mail });
+    return knex('users')
+      .select()
+      .where({ mail });
   }
 
   static create(user) {
