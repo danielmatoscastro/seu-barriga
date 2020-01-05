@@ -1,8 +1,8 @@
 const request = require('supertest');
 const faker = require('faker');
+const jwt = require('jsonwebtoken');
 const app = require('../src/app');
 const insert = require('./utils/insert')(app);
-const jwt = require('jsonwebtoken');
 
 describe('auth-related routes', () => {
   let user = {};
