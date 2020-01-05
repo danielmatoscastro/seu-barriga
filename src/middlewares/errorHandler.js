@@ -9,6 +9,4 @@ const errorHandler = (err, req, res, next) => {
   return res.sendStatus(500);
 };
 
-module.exports = (app) => {
-  app.use(errorHandler);
-};
+module.exports = errorHandler;
