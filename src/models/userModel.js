@@ -41,8 +41,7 @@ class UserModel {
   }
 
   static async getToken(mail, passwd) {
-    const user = await UserRepository.findByMail(mail)[0];
-
+    const user = (await UserRepository.findByMail(mail))[0];
     if (!user) {
       throwNotFoundError('user not found');
     }
