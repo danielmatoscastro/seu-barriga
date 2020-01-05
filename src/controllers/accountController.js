@@ -24,9 +24,12 @@ class AccountController {
 
   static async store(req, res, next) {
     try {
-      const account = req.body;
+      const { name } = req.body;
 
-      const result = await AccountModel.createAccount(account);
+      const result = await AccountModel.createAccount({
+        name,
+        user_id: req.id,
+      });
 
       return res.status(201).json(result);
     } catch (err) {

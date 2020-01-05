@@ -23,7 +23,6 @@ describe('account-related routes', () => {
 
   beforeEach(() => {
     account.name = faker.random.alphaNumeric(6);
-    account.user_id = user.id;
   });
 
   describe('POST /accounts', () => {
@@ -72,7 +71,7 @@ describe('account-related routes', () => {
       expect(response.body.length).toBeGreaterThan(0);
       expect(
         response.body.find(
-          (item) => item.name === account.name && item.user_id === account.user_id,
+          (item) => item.name === account.name && item.user_id === user.id,
         ),
       ).not.toBeUndefined();
     });
