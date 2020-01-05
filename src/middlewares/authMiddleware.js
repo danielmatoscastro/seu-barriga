@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 
 const verify = promisify(jwt.verify);
 
-const authMiddleware = (req, res, next) => {
+const authMiddleware = async (req, res, next) => {
   try {
     const { authorization } = req.headers;
 
@@ -17,7 +17,7 @@ const authMiddleware = (req, res, next) => {
       return res.status(400).json({ error: 'invalid token' });
     }
 
-    const decodedToken = verify(token, process.env.SECRET);
+    const decodedToken = await verify(token, process.env.SECRET);
     req.id = decodedToken.id;
 
     return next();
