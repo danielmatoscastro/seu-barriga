@@ -62,6 +62,22 @@ describe('account-related routes', () => {
       expect(response.status).toBe(201);
       expect(response.body[0]).toHaveProperty('name', account.name);
     });
+
+    it('should not insert two accounts with the same name for the same user', async () => {
+      await request(app)
+        .post('/accounts')
+        .set('Authorization', token)
+        .send(account);
+
+      const response = await request(app)
+        .post('/accounts')
+        .set('Authorization', token)
+        .send(account);
+
+      const { error } = response.body;
+      expect(response.status).toBe(400);
+      expect(error).toBe('name already exists');
+    });
   });
 
   describe('GET /accounts', () => {

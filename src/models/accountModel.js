@@ -20,7 +20,15 @@ class AccountModel {
     return result;
   }
 
-  static createAccount(account) {
+  static async createAccount(account) {
+    const accountInDB = await AccountRepository.find({
+      name: account.name,
+      user_id: account.user_id,
+    });
+    if (accountInDB.length > 0) {
+      throwValidationError('name already exists');
+    }
+
     return AccountRepository.create(account);
   }
 
