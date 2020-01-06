@@ -1,4 +1,4 @@
-const { VALIDATION_ERR, NOT_FOUND_ERR } = require('./types.js');
+const { VALIDATION_ERR, NOT_FOUND_ERR, FORBIDDEN_ERR } = require('./types.js');
 
 const throwValidationError = (message) => {
   const err = new Error(message);
@@ -12,4 +12,10 @@ const throwNotFoundError = (message) => {
   throw err;
 };
 
-module.exports = { throwValidationError, throwNotFoundError };
+const throwForbiddenError = (message) => {
+  const err = new Error(message);
+  err.status = FORBIDDEN_ERR;
+  throw err;
+};
+
+module.exports = { throwValidationError, throwNotFoundError, throwForbiddenError };
