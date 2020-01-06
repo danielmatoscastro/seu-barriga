@@ -1,9 +1,13 @@
 const AccountRepository = require('./repositories/accountRepository');
-const { throwValidationError, throwNotFoundError } = require('../errors/factories');
+const {
+  throwValidationError,
+  throwNotFoundError,
+} = require('../errors/factories');
 
 class AccountModel {
-  static listAccounts() {
-    return AccountRepository.find();
+  // eslint-disable-next-line camelcase
+  static listAccounts(user_id) {
+    return AccountRepository.find({ user_id });
   }
 
   static async findAccount(id) {

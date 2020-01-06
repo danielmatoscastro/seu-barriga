@@ -3,7 +3,7 @@ const AccountModel = require('../models/accountModel');
 class AccountController {
   static async index(req, res, next) {
     try {
-      const result = await AccountModel.listAccounts();
+      const result = await AccountModel.listAccounts(req.id);
 
       return res.json(result);
     } catch (err) {

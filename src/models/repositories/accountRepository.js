@@ -1,8 +1,10 @@
 const knex = require('../../config/db');
 
 class AccountRepository {
-  static find() {
-    return knex('accounts').select();
+  static find(filter = {}) {
+    return knex('accounts')
+      .select()
+      .where(filter);
   }
 
   static findById(id) {

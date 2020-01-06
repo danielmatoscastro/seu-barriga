@@ -9,7 +9,9 @@ describe('account-related routes', () => {
   let user;
   let user2;
   let token;
+  let token2;
   let account;
+  let account2;
 
   beforeAll(async () => {
     user = getFakeUser();
@@ -21,14 +23,22 @@ describe('account-related routes', () => {
     user.id = users[0].id;
     user2.id = users[1].id;
 
-    const responseAuth = await request(app)
-      .post('/login')
-      .send({ mail: user.mail, passwd: user.passwd });
+    const [responseAuth, responseAuth2] = await Promise.all([
+      request(app)
+        .post('/login')
+        .send({ mail: user.mail, passwd: user.passwd }),
+      request(app)
+        .post('/login')
+        .send({ mail: user2.mail, passwd: user2.passwd }),
+    ]);
+
     token = `Bearer ${responseAuth.body.token}`;
+    token2 = `Bearer ${responseAuth2.body.token}`;
   });
 
   beforeEach(() => {
     account = getFakeAccount();
+    account2 = getFakeAccount();
   });
 
   describe('POST /accounts', () => {
@@ -66,8 +76,11 @@ describe('account-related routes', () => {
       expect(response.body.length).toBeUndefined();
     });
 
-    it('should list all accounts', async () => {
-      await insert('accounts', account, token);
+    it('should list all accounts of one user', async () => {
+      await Promise.all([
+        insert('accounts', account, token),
+        insert('accounts', account2, token2),
+      ]);
 
       const response = await request(app)
         .get('/accounts')
@@ -75,11 +88,7 @@ describe('account-related routes', () => {
 
       expect(response.status).toBe(200);
       expect(response.body.length).toBeGreaterThan(0);
-      expect(
-        response.body.find(
-          (item) => item.name === account.name && item.user_id === user.id,
-        ),
-      ).not.toBeUndefined();
+      expect(response.body.every((item) => item.user_id === user.id)).toBe(true);
     });
   });
 
