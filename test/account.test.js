@@ -251,5 +251,21 @@ describe('account-related routes', () => {
       expect(response.status).toBe(200);
       expect(accountDeleted.status).toBe(404);
     });
+
+    it('should not delete anothers user account', async () => {
+      const { id } = await insert('accounts', account2, token2);
+      const url = `/accounts/${id}`;
+
+      const response = await request(app)
+        .delete(url)
+        .set('Authorization', token);
+
+      const accountNotDeleted = await selectInDB('accounts', id);
+
+      const { error } = response.body;
+      expect(response.status).toBe(403);
+      expect(error).toBe('this account is not yours');
+      expect(accountNotDeleted.name).toBe(account2.name);
+    });
   });
 });

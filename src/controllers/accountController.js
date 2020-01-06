@@ -54,7 +54,7 @@ class AccountController {
     try {
       const { id } = req.params;
 
-      await AccountModel.removeAccount(id);
+      await AccountModel.removeAccount(id, req.id);
 
       return res.sendStatus(200);
     } catch (err) {

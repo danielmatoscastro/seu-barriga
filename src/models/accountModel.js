@@ -52,7 +52,12 @@ class AccountModel {
     return AccountRepository.updateName(id, account.name);
   }
 
-  static removeAccount(id) {
+  static async removeAccount(id, user_id) {
+    const accountInDB = await AccountRepository.findById(id);
+    if (accountInDB[0].user_id !== user_id) {
+      throwForbiddenError('this account is not yours');
+    }
+
     return AccountRepository.delete(id);
   }
 }
