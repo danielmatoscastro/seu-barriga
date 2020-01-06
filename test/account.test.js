@@ -2,18 +2,24 @@ const request = require('supertest');
 const faker = require('faker');
 const app = require('../src/app');
 const insert = require('./utils/insert')(app);
+const getFakeUser = require('./utils/getFakeUser');
+const getFakeAccount = require('./utils/getFakeAccount');
 
 describe('account-related routes', () => {
-  const user = {};
+  let user;
+  let user2;
   let token;
-  const account = {};
+  let account;
 
   beforeAll(async () => {
-    user.name = faker.name.findName();
-    user.mail = faker.internet.email();
-    user.passwd = faker.internet.password(6);
-
-    user.id = (await insert('users', user)).id;
+    user = getFakeUser();
+    user2 = getFakeUser();
+    const users = await Promise.all([
+      insert('users', user),
+      insert('users', user2),
+    ]);
+    user.id = users[0].id;
+    user2.id = users[1].id;
 
     const responseAuth = await request(app)
       .post('/login')
@@ -22,7 +28,7 @@ describe('account-related routes', () => {
   });
 
   beforeEach(() => {
-    account.name = faker.random.alphaNumeric(6);
+    account = getFakeAccount();
   });
 
   describe('POST /accounts', () => {

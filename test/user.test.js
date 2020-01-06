@@ -1,17 +1,15 @@
 const request = require('supertest');
-const faker = require('faker');
 const bcrypt = require('bcrypt');
 const app = require('../src/app');
 const insert = require('./utils/insert')(app);
 const selectInDB = require('./utils/selectInDB');
+const getFakeUser = require('./utils/getFakeUser');
 
 describe('user-related routes', () => {
-  const user = {};
+  let user;
 
   beforeEach(() => {
-    user.name = faker.name.findName();
-    user.mail = faker.internet.email();
-    user.passwd = faker.internet.password(6);
+    user = getFakeUser();
   });
 
   describe('POST /users', () => {

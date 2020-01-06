@@ -1,16 +1,14 @@
 const request = require('supertest');
-const faker = require('faker');
 const jwt = require('jsonwebtoken');
 const app = require('../src/app');
 const insert = require('./utils/insert')(app);
+const getFakeUser = require('./utils/getFakeUser');
 
 describe('auth-related routes', () => {
-  const user = {};
+  let user;
 
   beforeAll(async () => {
-    user.name = faker.name.findName();
-    user.mail = faker.internet.email();
-    user.passwd = faker.internet.password(6);
+    user = getFakeUser();
 
     user.id = (await insert('users', user)).id;
   });
