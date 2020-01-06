@@ -14,7 +14,7 @@ class AccountController {
   static async show(req, res, next) {
     try {
       const { id } = req.params;
-      const result = await AccountModel.findAccount(id);
+      const result = await AccountModel.findAccount(id, req.id);
 
       return res.json(result);
     } catch (err) {

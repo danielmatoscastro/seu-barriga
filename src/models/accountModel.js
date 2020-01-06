@@ -1,20 +1,25 @@
+/* eslint-disable camelcase */
 const AccountRepository = require('./repositories/accountRepository');
 const {
   throwValidationError,
   throwNotFoundError,
+  throwForbiddenError,
 } = require('../errors/factories');
 
 class AccountModel {
-  // eslint-disable-next-line camelcase
   static listAccounts(user_id) {
     return AccountRepository.find({ user_id });
   }
 
-  static async findAccount(id) {
+  static async findAccount(id, user_id) {
     const result = await AccountRepository.findById(id);
 
     if (result.length === 0) {
       throwNotFoundError('account not found');
+    }
+
+    if (result[0].user_id !== user_id) {
+      throwForbiddenError('this account is not yours');
     }
 
     return result;

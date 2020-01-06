@@ -141,6 +141,19 @@ describe('account-related routes', () => {
 
       expect(response.status).toBe(404);
     });
+
+    it('should not return anothers user account', async () => {
+      const account2DB = await insert('accounts', account2, token2);
+
+      const response = await request(app)
+        .get(`/accounts/${account2DB.id}`)
+        .set('Authorization', token);
+
+      const { error } = response.body;
+      expect(response.status).toBe(403);
+      expect(error).toBe('this account is not yours');
+      expect(response.body.length).toBeUndefined();
+    });
   });
 
   describe('PUT /accounts/:id', () => {
