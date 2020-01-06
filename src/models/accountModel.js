@@ -37,11 +37,16 @@ class AccountModel {
     return AccountRepository.create(account);
   }
 
-  static updateAccount(id, account) {
+  static async updateAccount(id, account, user_id) {
     const { name } = account;
 
     if (!name || name.trim() === '') {
       throwValidationError('Name must be a non-empty string.');
+    }
+
+    const accountInDB = await AccountRepository.findById(id);
+    if (accountInDB[0].user_id !== user_id) {
+      throwForbiddenError('this account is not yours');
     }
 
     return AccountRepository.updateName(id, account.name);

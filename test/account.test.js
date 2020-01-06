@@ -2,6 +2,7 @@ const request = require('supertest');
 const faker = require('faker');
 const app = require('../src/app');
 const insert = require('./utils/insert')(app);
+const selectInDB = require('./utils/selectInDB');
 const getFakeUser = require('./utils/getFakeUser');
 const getFakeAccount = require('./utils/getFakeAccount');
 
@@ -197,6 +198,24 @@ describe('account-related routes', () => {
 
       expect(response.status).toBe(204);
       expect(accountDBModified.name).toBe(accountDB.name);
+    });
+
+    it('should not update anothers user account', async () => {
+      const accountDB = await insert('accounts', account2, token2);
+      const url = `/accounts/${accountDB.id}`;
+      accountDB.name += new Date().getMilliseconds().toString();
+
+      const response = await request(app)
+        .put(url)
+        .send(accountDB)
+        .set('Authorization', token);
+
+      const accountDBNotModified = await selectInDB('accounts', accountDB.id);
+
+      const { error } = response.body;
+      expect(response.status).toBe(403);
+      expect(error).toBe('this account is not yours');
+      expect(accountDBNotModified.name).toBe(account2.name);
     });
   });
 

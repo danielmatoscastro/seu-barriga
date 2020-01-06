@@ -42,7 +42,7 @@ class AccountController {
       const { id } = req.params;
       const account = req.body;
 
-      await AccountModel.updateAccount(id, account);
+      await AccountModel.updateAccount(id, account, req.id);
 
       return res.sendStatus(204);
     } catch (err) {
