@@ -1,10 +1,6 @@
 /* eslint-disable camelcase */
+const createError = require('http-errors');
 const AccountRepository = require('./repositories/accountRepository');
-const {
-  throwValidationError,
-  throwNotFoundError,
-  throwForbiddenError,
-} = require('../errors/factories');
 
 class AccountModel {
   static listAccounts(user_id) {
@@ -15,11 +11,11 @@ class AccountModel {
     const result = await AccountRepository.findById(id);
 
     if (result.length === 0) {
-      throwNotFoundError('account not found');
+      throw new createError.NotFound('account not found');
     }
 
     if (result[0].user_id !== user_id) {
-      throwForbiddenError('this account is not yours');
+      throw new createError.Forbidden('this account is not yours');
     }
 
     return result;
@@ -30,8 +26,9 @@ class AccountModel {
       name: account.name,
       user_id: account.user_id,
     });
+
     if (accountInDB.length > 0) {
-      throwValidationError('name already exists');
+      throw new createError.BadRequest('name already exists');
     }
 
     return AccountRepository.create(account);
@@ -41,12 +38,12 @@ class AccountModel {
     const { name } = account;
 
     if (!name || name.trim() === '') {
-      throwValidationError('Name must be a non-empty string.');
+      throw new createError.BadRequest('Name must be a non-empty string.');
     }
 
     const accountInDB = await AccountRepository.findById(id);
     if (accountInDB[0].user_id !== user_id) {
-      throwForbiddenError('this account is not yours');
+      throw new createError.Forbidden('this account is not yours');
     }
 
     return AccountRepository.updateName(id, account.name);
@@ -55,7 +52,7 @@ class AccountModel {
   static async removeAccount(id, user_id) {
     const accountInDB = await AccountRepository.findById(id);
     if (accountInDB[0].user_id !== user_id) {
-      throwForbiddenError('this account is not yours');
+      throw new createError.Forbidden('this account is not yours');
     }
 
     return AccountRepository.delete(id);
