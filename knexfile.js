@@ -1,3 +1,7 @@
+require('dotenv').config({
+  path: process.env.NODE_ENV === 'production' ? '.env' : '.test.env',
+});
+
 module.exports = {
   client: 'pg',
   version: '11.5',
