@@ -1,5 +1,4 @@
 const request = require('supertest');
-const faker = require('faker');
 const app = require('../src/app');
 const insert = require('./utils/insert')(app);
 const selectInDB = require('./utils/selectInDB');
@@ -134,7 +133,7 @@ describe('account-related routes', () => {
     });
 
     it('should return 404 when account not exists', async () => {
-      const id = faker.random.number({ min: 10000000 });
+      const id = 10000000;
 
       const response = await request(app)
         .get(`/accounts/${id}`)
